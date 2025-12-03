@@ -1,0 +1,9 @@
+# Netlify Identity Redirects
+/admin/                       /admin/index.html   200
+/.netlify/identity            /.netlify/identity  200
+
+# Redirect setelah Login dan Logout
+/admin/login                  /admin/             200
+/admin/logout                 /admin/             200
+/admin/* /admin/             200
+/admin/                       /admin/             200
