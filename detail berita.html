@@ -201,75 +201,88 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <script>
-        /* ---------- JAVASCRIPT UTAMA (SALIN DARI NEWS.HTML) ---------- */
-        // ... (Kode Menu, Scroll, Reveal, BackToTop, dll. dari news.html disalin di sini) ...
-        // INI PENTING AGAR NAVIGASI & EFEK LAINNYA BERJALAN
+        // --- FUNGSI CUSTOM PARSER UNTUK MEMBACA METADATA DARI FILE MARKDOWN ---
+        function parseFrontMatter(markdown) {
+            // Menggunakan regex untuk mencari blok YAML (dimulai dan diakhiri dengan '---')
+            const frontmatterRegex = /^---\s*([\s\S]*?)\s*---/;
+            const match = markdown.match(frontmatterRegex);
 
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const slideOverlay = document.getElementById('slideOverlay');
-        const slidePanel = document.getElementById('slidePanel');
+            let data = {};
+            let content = markdown;
 
-        // [SISIPKAN SEMUA FUNGSI JAVASCRIPT UTAMA (openSlideMenu, closeSlideMenu, toggleSlideMenu, Smooth Scroll, Reveal, BackToTop) DARI news.html DI SINI]
+            if (match && match.length > 1) {
+                const yamlText = match[1];
+                content = markdown.substring(match[0].length).trim(); // Sisa adalah body konten
 
-        // Fungsi untuk mengambil parameter dari URL
+                // Parsing YAML sederhana menjadi objek JS
+                yamlText.split('\n').forEach(line => {
+                    const parts = line.split(':').map(p => p.trim());
+                    if (parts.length >= 2) {
+                        let key = parts[0].replace(/"/g, '').replace(/'/g, '');
+                        let value = parts.slice(1).join(':').trim();
+                        
+                        // Hapus tanda kutip dari nilai
+                        value = value.startsWith("'") || value.startsWith('"') ? value.substring(1, value.length - 1) : value;
+                        
+                        // Konversi string ke tipe yang sesuai (angka, boolean, dsb. - disederhanakan)
+                        if (value.toLowerCase() === 'true') value = true;
+                        else if (value.toLowerCase() === 'false') value = false;
+                        else if (!isNaN(Number(value))) value = Number(value);
+
+                        data[key] = value;
+                    }
+                });
+            }
+            return { data, content };
+        }
+
+        // --- FUNGSI UTILITY ---
         function getQueryParam(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
         }
 
-        // Fungsi untuk parsing YAML Front Matter dari file Markdown
-        function parseMarkdown(markdown) {
-            const parts = markdown.split('---');
-            if (parts.length < 3) return { metadata: {}, body: markdown };
-
-            const yamlString = parts[1].trim();
-            const body = parts.slice(2).join('---').trim();
-
-            const metadata = {};
-            yamlString.split('\n').forEach(line => {
-                const [key, ...values] = line.split(':');
-                if (key) {
-                    metadata[key.trim()] = values.join(':').trim().replace(/^['"]|['"]$/g, '');
-                }
-            });
-            return { metadata, body };
-        }
-
-        function formatDate(isoDate) {
+        function formatDate(dateString) {
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             try {
-                return new Date(isoDate).toLocaleDateString('id-ID', options);
+                return new Date(dateString).toLocaleDateString('id-ID', options);
             } catch (e) {
-                return isoDate;
+                return dateString;
             }
         }
-
+        
+        // --- FUNGSI UTAMA UNTUK MEMUAT KONTEN BERITA ---
         async function loadNewsDetail() {
-            const filename = getQueryParam('file');
+            // Dapatkan nama file dari URL parameter 'file'
+            const filename = getQueryParam('file'); 
+
             if (!filename) {
-                document.getElementById('newsTitle').textContent = 'Error: Berita tidak ditemukan.';
-                document.getElementById('newsContent').innerHTML = '<p>Nama file berita tidak disediakan dalam URL.</p>';
-                document.getElementById('pageTitle').textContent = 'Error';
+                document.getElementById('newsTitle').textContent = 'Error: Berita Tidak Ditemukan';
+                document.getElementById('newsContent').innerHTML = '<p style="text-align:center;">Parameter berita tidak valid. Kembali ke halaman Berita.</p>';
                 return;
             }
 
-            const path = `_news/${filename}`;
-            document.getElementById('newsContent').innerHTML = '<p style="text-align:center;">Memuat konten berita...</p>';
-
             try {
-                const response = await fetch(path);
-                if (!response.ok) throw new Error('File berita tidak ditemukan di server.');
+                // PERBAIKAN: Menggunakan folder _berita
+                const filePath = `_berita/${filename}.md`; 
+                
+                // 1. Ambil konten Markdown dari server
+                const response = await fetch(filePath);
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error('Berita tidak ditemukan.');
+                    }
+                    throw new Error('Gagal mengambil konten berita. Status: ' + response.status);
+                }
+                const markdownContent = await response.text();
 
-                const rawMarkdown = await response.text();
-                const { metadata, body } = parseMarkdown(rawMarkdown);
+                // 2. Parsing Frontmatter dan Body
+                const { data: metadata, content: body } = parseFrontMatter(markdownContent); 
 
-                // Update Judul Halaman
-                document.getElementById('pageTitle').textContent = metadata.title ? `${metadata.title} — Arka Living` : 'Berita Arka Living';
-
-                // Tampilkan Konten
-                document.getElementById('newsTitle').textContent = metadata.title || 'Judul Tidak Ditemukan';
-                document.getElementById('newsAuthor').textContent = metadata.author || 'Tim Redaksi';
-                document.getElementById('newsDate').textContent = formatDate(metadata.date) || 'Tanggal Tidak Diketahui';
+                // 3. Update Elemen HTML dengan Metadata
+                document.getElementById('pageTitle').textContent = metadata.title || 'Detail Berita';
+                document.getElementById('newsTitle').textContent = metadata.title || 'Judul Tidak Diketahui';
+                document.getElementById('newsDate').textContent = metadata.date ? formatDate(metadata.date) : 'Tanggal Tidak Diketahui';
 
                 // Tampilkan Tag
                 const tagElement = document.getElementById('newsTag');
@@ -280,7 +293,7 @@
                     tagElement.style.display = 'none';
                 }
 
-                // Tampilkan Gambar (jika ada)
+                // Tampilkan Gambar
                 const imgElement = document.getElementById('newsImage');
                 if (metadata.image) {
                     imgElement.src = metadata.image;
@@ -296,20 +309,20 @@
 
                 // Re-observer reveal setelah konten dimuat
                 document.querySelectorAll('.reveal').forEach(r => {
-                    r.classList.add('is-revealed'); // Anggap semua sudah revealed di halaman detail
+                    r.classList.add('is-revealed'); 
                 });
 
 
             } catch (error) {
                 console.error("Gagal memuat atau memproses berita:", error);
                 document.getElementById('newsTitle').textContent = 'Error: Gagal Memuat Berita';
-                document.getElementById('newsContent').innerHTML = '<p style="text-align:center;">Terjadi kesalahan saat mengambil konten. Mohon coba lagi nanti.</p>';
+                document.getElementById('newsContent').innerHTML = `<p style="text-align:center;">${error.message || 'Terjadi kesalahan saat mengambil konten.'}</p>`;
             }
         }
 
         // Panggil fungsi saat halaman dimuat
         loadNewsDetail();
+
     </script>
 </body>
-
 </html>

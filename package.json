@@ -1,0 +1,11 @@
+{
+  "name": "netlify-cms-json-build",
+  "version": "1.0.0",
+  "description": "Script to generate news data manifest from markdown files.",
+  "scripts": {
+    "build:data": "node ./build-scripts/generate-news-data.js"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3"
+  }
+}

@@ -637,93 +637,84 @@
         /* ---------- END JAVASCRIPT UTAMA ---------- */
 
 
-        // --- FUNGSI KHUSUS UNTUK MEMUAT DAFTAR BERITA DARI NETLIFY CMS ---
+        /* ---------- START FUNGSI FINAL UNTUK MEMUAT DAFTAR BERITA DARI JSON ---------- */
 
-        // !!! PENTING: UPDATE ARRAY INI SETIAP KALI ADMIN MENAMBAH BERITA BARU !!!
-        const newsFiles = [
-            "luncurkan-koleksi-spring.md", // Contoh berita
-            // "berita-terbaru-dari-cms.md", // Tambahkan nama file di sini jika ada
-        ];
-
-        function parseMarkdownMeta(markdown) {
-            const parts = markdown.split('---');
-            if (parts.length < 3) return {};
-
-            const yamlString = parts[1].trim();
-            const metadata = {};
-            yamlString.split('\n').forEach(line => {
-                const [key, ...values] = line.split(':');
-                if (key) {
-                    // Penanganan value yang berupa string (termasuk path gambar)
-                    metadata[key.trim()] = values.join(':').trim().replace(/^['"]|['"]$/g, '');
-                }
-            });
-            return metadata;
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        // Tambahkan try/catch untuk mencegah error jika tanggal tidak valid
+        try {
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        } catch (e) {
+            return dateString;
         }
+    }
 
-        function formatDate(isoDate) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            try {
-                return new Date(isoDate).toLocaleDateString('id-ID', options);
-            } catch (e) {
-                return isoDate;
+    async function fetchAndRenderNewsList() {
+        const container = document.getElementById('newsListContainer');
+        // Pastikan kontainer pemuat daftar berita sudah ada di HTML Anda:
+        // <section id="newsListContainer" class="news-grid">...</section>
+        
+        container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--muted);" id="loadingMessage">Memuat daftar berita...</p>';
+
+        try {
+            // A. MENGAMBIL FILE JSON MANIFEST YANG DIBUAT OLEH NODE.JS SCRIPT
+            const response = await fetch('/news-data.json'); 
+            if (!response.ok) {
+                throw new Error('Gagal memuat daftar berita (news-data.json). Status: ' + response.status);
             }
-        }
+            
+            const newsData = await response.json(); 
+            
+            container.innerHTML = ''; // Kosongkan pesan "Memuat berita..."
 
-        async function fetchAndRenderNewsList() {
-            const container = document.getElementById('newsListContainer');
-            const loadingMessage = document.getElementById('loadingMessage');
-            container.innerHTML = ''; // Kosongkan
-
-            if (newsFiles.length === 0) {
-                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--muted);">Belum ada berita yang tersedia.</p>';
+            if (newsData.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--muted);">Belum ada berita yang dipublikasikan.</p>';
                 return;
             }
 
-            // Loop untuk setiap file berita
-            for (const filename of newsFiles) {
-                try {
-                    const response = await fetch(`_news/${filename}`);
-                    if (!response.ok) continue;
-
-                    const rawMarkdown = await response.text();
-                    const metadata = parseMarkdownMeta(rawMarkdown);
-
-                    // Ekstrak ringkasan (30 kata pertama)
-                    const body = rawMarkdown.split('---').slice(2).join('---').trim();
-                    const excerpt = body.split(/\s+/).slice(0, 30).join(' ') + '...';
-
-                    const newsItemHTML = `
-                        <div class="news-item-card reveal">
-                            <a href="detail-berita.html?file=${filename}" aria-label="Baca selengkapnya: ${metadata.title || 'Berita'}">
-                                <div class="news-thumb">
-                                    <img src="${metadata.image || 'gambar/placeholder-news.jpg'}" alt="${metadata.title || 'Gambar Berita'}" loading="lazy">
+            // B. ITERASI DAN TAMPILKAN SETIAP BERITA
+            newsData.forEach(metadata => {
+                // Ambil ringkasan dari properti 'summary' (jika ada di config.yml) atau dari 'body' (yang berisi 500 karakter pertama)
+                const excerpt = metadata.summary || (metadata.body ? metadata.body.substring(0, 150) + '...' : 'Baca selengkapnya untuk detail.');
+                
+                // metadata.file adalah nama file asli (misal: 2025-12-03-judul-berita.md)
+                const filenameWithoutExt = metadata.file.replace('.md', ''); 
+                
+                const newsItemHTML = `
+                    <div class="news-item-card reveal">
+                        <a href="detail berita.html?file=${filenameWithoutExt}" aria-label="Baca selengkapnya: ${metadata.title || 'Berita'}">
+                            <div class="news-thumb">
+                                <img src="${metadata.image || 'gambar/placeholder-news.jpg'}" alt="${metadata.title || 'Gambar Berita'}" loading="lazy">
+                            </div>
+                            <div class="news-content">
+                                <div class="news-meta">
+                                    <span class="tag">${metadata.tag || 'Update'}</span> | ${formatDate(metadata.date) || 'Tanggal Tidak Diketahui'}
                                 </div>
-                                <div class="news-content">
-                                    <div class="news-meta">
-                                        <span class="tag">${metadata.tag || 'Update'}</span> | ${formatDate(metadata.date) || 'Tanggal Tidak Diketahui'}
-                                    </div>
-                                    <h3>${metadata.title || 'Judul Berita Tidak Diketahui'}</h3>
-                                    <p>${excerpt}</p>
-                                    <span class="read-more">Baca Selengkapnya →</span>
-                                </div>
-                            </a>
-                        </div>
-                    `;
-                    container.innerHTML += newsItemHTML;
-
-                } catch (e) {
-                    console.error("Gagal memuat berita:", filename, e);
-                }
-            }
-
-            // Re-inisialisasi observer untuk item baru
+                                <h3>${metadata.title || 'Judul Berita Tidak Diketahui'}</h3>
+                                <p>${excerpt}</p>
+                                <span class="read-more">Baca Selengkapnya →</span>
+                            </div>
+                        </a>
+                    </div>
+                `;
+                container.innerHTML += newsItemHTML;
+            });
+            
+            // C. Re-inisialisasi observer untuk item baru
             const newReveals = container.querySelectorAll('.reveal');
             newReveals.forEach(r => io.observe(r));
+            
+        } catch (e) {
+            console.error("Gagal memuat berita:", e);
+            container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--muted);">Terjadi kesalahan saat memuat daftar berita.</p>';
         }
+    }
 
-        fetchAndRenderNewsList();
-    </script>
+    // Panggil fungsi saat halaman dimuat
+    fetchAndRenderNewsList();
+    
+    /* ---------- END FUNGSI FINAL UNTUK MEMUAT DAFTAR BERITA DARI JSON ---------- */
+</script>
 </body>
 
 </html>
