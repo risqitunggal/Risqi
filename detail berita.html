@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title id="pageTitle">Memuat Berita...</title>
+    <meta name="description" content="Detail berita dari Arka Living.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Copy-paste SELURUH CSS dari <style> di news.html (termasuk yang disalin dari index.html) */
+        /* Pastikan semua variabel :root, base style, header, footer, dan utilities sudah ada di sini. */
+        :root {
+            --primary: #1abc9c;
+            --dark: #2c3e50;
+            --light: #f8fafb;
+            --muted: #6b7280;
+            --glass: rgba(255, 255, 255, 0.6);
+            --radius-lg: 16px;
+            --radius-md: 10px;
+        }
+
+        /* Reset dan base */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        body {
+            font-family: "Inter", system-ui, sans-serif;
+            background: linear-gradient(180deg, var(--light) 0%, #ffffff 100%);
+            color: #111827;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            height: auto;
+            display: block;
+        }
+
+        /* ---------- Header, Nav, Utilities, etc. (SALIN DARI NEWS.HTML) ---------- */
+        header.site-header {
+            /* ... */
+        }
+
+        .brand {
+            /* ... */
+        }
+
+        .logo-mark {
+            /* ... */
+        }
+
+        nav.site-nav {
+            /* ... */
+        }
+
+        button.hamburger {
+            /* ... */
+        }
+
+        .slide-overlay {
+            /* ... */
+        }
+
+        /* ... SEMUA CSS BAWAAN DARI INDEX.HTML ... */
+
+        /* --- CSS KHUSUS HALAMAN DETAIL BERITA --- */
+        .news-detail-container {
+            max-width: 900px;
+            margin: 100px auto 80px;
+            padding: 20px 6%;
+        }
+
+        .news-header {
+            margin-bottom: 30px;
+        }
+
+        .news-header .back-link {
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .news-header h1 {
+            font-size: 2.8rem;
+            line-height: 1.15;
+            margin: 0 0 10px;
+            color: var(--dark);
+        }
+
+        .news-meta {
+            color: var(--muted);
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(44, 62, 80, 0.08);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .news-meta .tag {
+            background: var(--light);
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .news-image {
+            width: 100%;
+            height: auto;
+            max-height: 480px;
+            object-fit: cover;
+            border-radius: var(--radius-lg);
+            margin-bottom: 40px;
+            box-shadow: 0 12px 30px rgba(44, 62, 80, 0.1);
+        }
+
+        /* Styling untuk konten Markdown yang sudah di-parse */
+        .news-body {
+            line-height: 1.75;
+            font-size: 1.05rem;
+        }
+
+        .news-body h2,
+        .news-body h3 {
+            margin-top: 35px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .news-body p {
+            margin-bottom: 1.4rem;
+        }
+
+        .news-body ul,
+        .news-body ol {
+            padding-left: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .news-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header" role="banner">
+    </header>
+    <div class="slide-overlay" id="slideOverlay" aria-hidden="true">
+    </div>
+
+    <main class="news-detail-container">
+        <article id="newsArticle">
+            <div class="news-header reveal">
+                <a href="news.html" class="back-link">← Kembali ke Daftar Berita</a>
+                <h1 id="newsTitle">Memuat Judul Berita...</h1>
+                <div class="news-meta">
+                    <span class="tag" id="newsTag" style="display:none;"></span>
+                    Oleh <span id="newsAuthor">...</span> | <time id="newsDate">...</time>
+                </div>
+                <img id="newsImage" class="news-image" src="" alt="Gambar Berita" style="display:none;" loading="lazy">
+            </div>
+
+            <div class="news-body reveal" id="newsContent">
+                <p>Silakan tunggu, konten berita sedang dimuat...</p>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+    </footer>
+
+    <button id="backToTop" title="Kembali ke atas">↑</button>
+    <a href="https://wa.me/6281234567890" target="_blank" id="whatsappBtn" title="Chat via WhatsApp">
+    </a>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        /* ---------- JAVASCRIPT UTAMA (SALIN DARI NEWS.HTML) ---------- */
+        // ... (Kode Menu, Scroll, Reveal, BackToTop, dll. dari news.html disalin di sini) ...
+        // INI PENTING AGAR NAVIGASI & EFEK LAINNYA BERJALAN
+
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const slideOverlay = document.getElementById('slideOverlay');
+        const slidePanel = document.getElementById('slidePanel');
+
+        // [SISIPKAN SEMUA FUNGSI JAVASCRIPT UTAMA (openSlideMenu, closeSlideMenu, toggleSlideMenu, Smooth Scroll, Reveal, BackToTop) DARI news.html DI SINI]
+
+        // Fungsi untuk mengambil parameter dari URL
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Fungsi untuk parsing YAML Front Matter dari file Markdown
+        function parseMarkdown(markdown) {
+            const parts = markdown.split('---');
+            if (parts.length < 3) return { metadata: {}, body: markdown };
+
+            const yamlString = parts[1].trim();
+            const body = parts.slice(2).join('---').trim();
+
+            const metadata = {};
+            yamlString.split('\n').forEach(line => {
+                const [key, ...values] = line.split(':');
+                if (key) {
+                    metadata[key.trim()] = values.join(':').trim().replace(/^['"]|['"]$/g, '');
+                }
+            });
+            return { metadata, body };
+        }
+
+        function formatDate(isoDate) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            try {
+                return new Date(isoDate).toLocaleDateString('id-ID', options);
+            } catch (e) {
+                return isoDate;
+            }
+        }
+
+        async function loadNewsDetail() {
+            const filename = getQueryParam('file');
+            if (!filename) {
+                document.getElementById('newsTitle').textContent = 'Error: Berita tidak ditemukan.';
+                document.getElementById('newsContent').innerHTML = '<p>Nama file berita tidak disediakan dalam URL.</p>';
+                document.getElementById('pageTitle').textContent = 'Error';
+                return;
+            }
+
+            const path = `_news/${filename}`;
+            document.getElementById('newsContent').innerHTML = '<p style="text-align:center;">Memuat konten berita...</p>';
+
+            try {
+                const response = await fetch(path);
+                if (!response.ok) throw new Error('File berita tidak ditemukan di server.');
+
+                const rawMarkdown = await response.text();
+                const { metadata, body } = parseMarkdown(rawMarkdown);
+
+                // Update Judul Halaman
+                document.getElementById('pageTitle').textContent = metadata.title ? `${metadata.title} — Arka Living` : 'Berita Arka Living';
+
+                // Tampilkan Konten
+                document.getElementById('newsTitle').textContent = metadata.title || 'Judul Tidak Ditemukan';
+                document.getElementById('newsAuthor').textContent = metadata.author || 'Tim Redaksi';
+                document.getElementById('newsDate').textContent = formatDate(metadata.date) || 'Tanggal Tidak Diketahui';
+
+                // Tampilkan Tag
+                const tagElement = document.getElementById('newsTag');
+                if (metadata.tag) {
+                    tagElement.textContent = metadata.tag;
+                    tagElement.style.display = 'inline-block';
+                } else {
+                    tagElement.style.display = 'none';
+                }
+
+                // Tampilkan Gambar (jika ada)
+                const imgElement = document.getElementById('newsImage');
+                if (metadata.image) {
+                    imgElement.src = metadata.image;
+                    imgElement.alt = metadata.title || 'Gambar Utama';
+                    imgElement.style.display = 'block';
+                } else {
+                    imgElement.style.display = 'none';
+                }
+
+                // Parsing Markdown body menjadi HTML (menggunakan marked.js)
+                const htmlContent = marked.parse(body);
+                document.getElementById('newsContent').innerHTML = htmlContent;
+
+                // Re-observer reveal setelah konten dimuat
+                document.querySelectorAll('.reveal').forEach(r => {
+                    r.classList.add('is-revealed'); // Anggap semua sudah revealed di halaman detail
+                });
+
+
+            } catch (error) {
+                console.error("Gagal memuat atau memproses berita:", error);
+                document.getElementById('newsTitle').textContent = 'Error: Gagal Memuat Berita';
+                document.getElementById('newsContent').innerHTML = '<p style="text-align:center;">Terjadi kesalahan saat mengambil konten. Mohon coba lagi nanti.</p>';
+            }
+        }
+
+        // Panggil fungsi saat halaman dimuat
+        loadNewsDetail();
+    </script>
+</body>
+
+</html>

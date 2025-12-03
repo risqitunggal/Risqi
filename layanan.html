@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Arka Living — Layanan Kami</title>
+    <meta name="description"
+        content="Layanan Arka Living — furniture custom & interior modern. Furniture, desain interior, konsultasi, project turnkey, material premium.">
+    <meta name="theme-color" content="#1abc9c">
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1abc9c;
+            --dark: #2c3e50;
+            --light: #f8fafb;
+            --muted: #6b7280;
+            --glass: rgba(255, 255, 255, 0.6);
+            --radius-lg: 16px;
+            --radius-md: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: "Inter", system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, var(--light) 0%, #ffffff 100%);
+            color: #111827;
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* HEADER */
+        header.site-header {
+            position: fixed;
+            inset: 0 0 auto 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 28px;
+            gap: 18px;
+            z-index: 1200;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.35));
+            backdrop-filter: blur(8px) saturate(120%);
+            border-bottom: 1px solid rgba(44, 62, 80, 0.04);
+            box-shadow: 0 6px 20px rgba(44, 62, 80, 0.04);
+        }
+
+        .brand {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            color: var(--dark);
+        }
+
+        .logo-mark {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), #16a085);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 6px 18px rgba(26, 188, 156, 0.15);
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .brand p {
+            margin: 0;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        nav.site-nav {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+        }
+
+        nav.site-nav a {
+            position: relative;
+            padding: 8px 6px;
+            font-weight: 600;
+        }
+
+        nav.site-nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: width .25s ease;
+            border-radius: 2px;
+        }
+
+        nav.site-nav a:hover::after {
+            width: 100%;
+        }
+
+        nav.site-nav a.primary {
+            padding: 8px 14px;
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 1px rgba(26, 188, 156, 0.14);
+        }
+
+        button.hamburger {
+            width: 48px;
+            height: 46px;
+            border-radius: 12px;
+            border: 0;
+            background: var(--glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 6px 18px rgba(44, 62, 80, 0.06);
+        }
+
+        @media (min-width:901px) {
+            button.hamburger {
+                display: none !important;
+            }
+        }
+
+        @media (max-width:900px) {
+            button.hamburger {
+                display: flex !important;
+            }
+        }
+
+        /* Sembunyikan navbar di mobile */
+        @media (max-width:900px) {
+            nav.site-nav {
+                display: none;
+            }
+
+            button.hamburger {
+                display: flex;
+            }
+        }
+
+
+        .slide-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(44, 62, 80, 0.55);
+            backdrop-filter: blur(2px);
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            z-index: 1400;
+        }
+
+        .slide-overlay.active {
+            display: flex;
+        }
+
+        .slide-panel {
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 92%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(10px) saturate(120%);
+            border-radius: 12px;
+            box-shadow: 0 18px 40px rgba(2, 6, 23, 0.18);
+            padding: 18px;
+            transform: translateY(-16px);
+            opacity: 0;
+            visibility: hidden;
+            transition: transform 0.28s cubic-bezier(.2, .9, .2, 1), opacity 0.28s ease, visibility 0.28s;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .slide-panel.show {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .slide-panel nav {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .slide-panel nav a {
+            display: block;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 8px 18px rgba(2, 6, 23, 0.06);
+            font-weight: 700;
+        }
+
+        .slide-panel nav a.primary {
+            background: linear-gradient(90deg, rgba(26, 188, 156, 0.12), rgba(26, 188, 156, 0.06));
+            color: var(--primary);
+        }
+
+        main.hero {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding-top: 120px;
+        }
+
+        main.hero h2 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        main.hero p {
+            max-width: 720px;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        section.container {
+            padding: 80px 6%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            gap: 36px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width:768px) {
+            .grid-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width:768px) {
+            .grid-3 {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        .card-surface {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+        }
+
+        h3 {
+            margin-top: 0;
+            color: var(--dark);
+        }
+
+        p,
+        li {
+            color: var(--muted);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            border: 0;
+            cursor: pointer;
+            text-align: center;
+            margin: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), #16a085);
+            color: white;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid rgba(44, 62, 80, 0.06);
+            color: var(--dark);
+            transition: transform 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .btn-ghost:hover {
+            transform: scale(1.05);
+            color: white;
+            background: linear-gradient(90deg, #1abc9c, #16a085);
+            box-shadow: 0 8px 20px rgba(26, 188, 156, 0.4);
+        }
+
+        footer.site-footer {
+            padding: 32px 6%;
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            font-size: 0.95rem;
+            margin-top: 36px;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Back to top */
+        #backTop {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 24px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        #backTop:hover {
+            background: #16a085;
+        }
+
+        /* Tambahan Style untuk Proses Kerja (Timeline) */
+
+        .timeline-container {
+            position: relative;
+            max-width: 800px;
+            /* Lebar maksimum untuk timeline */
+            margin: 40px auto 0;
+            padding-left: 30px;
+            /* Memberi ruang untuk garis vertikal */
+        }
+
+        /* Garis vertikal timeline */
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 10px;
+            width: 4px;
+            height: 100%;
+            background: var(--light);
+            /* Warna garis vertikal muda */
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+            padding-left: 30px;
+            /* Jarak antara garis dan konten */
+        }
+
+        .timeline-icon {
+            position: absolute;
+            left: -20px;
+            /* Posisi ikon di tengah garis */
+            top: 0;
+            width: 44px;
+            height: 44px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(26, 188, 156, 0.4);
+        }
+
+        .timeline-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .timeline-content {
+            flex-grow: 1;
+            margin-left: 20px;
+            padding: 20px 24px;
+            /* Padding card disesuaikan */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(2, 6, 23, 0.12);
+        }
+
+        .timeline-content h3 {
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .timeline-content p {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Hapus style grid-4 yang lama untuk bagian ini */
+        .grid-4 {
+            display: block;
+            /* Menghilangkan grid lama */
+            gap: 0;
+        }
+
+        /* Media query untuk tampilan yang lebih kecil */
+        @media (max-width: 600px) {
+            .timeline-container {
+                padding-left: 20px;
+                margin-top: 20px;
+            }
+
+            .timeline-container::before {
+                left: 5px;
+            }
+
+            .timeline-icon {
+                left: -18px;
+                width: 36px;
+                height: 36px;
+            }
+
+            .timeline-icon svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .timeline-item {
+                padding-left: 20px;
+            }
+
+            .timeline-content {
+                margin-left: 10px;
+                padding: 16px 20px;
+            }
+        }
+
+        /* FAQ Section */
+        .faq-list {
+            max-width: 800px;
+            margin: 40px auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .faq-item {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #f0f4f7;
+        }
+
+        .faq-question h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            color: var(--primary);
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 24px;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            /* Nilai besar agar konten bisa muat */
+            padding-bottom: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="site-header">
+        <a class="brand" href="index.html" aria-label="Arka Living Home">
+            <span class="logo-mark">AL</span>
+            <div>
+                <h1>Arka Living</h1>
+                <p>Furniture • Interior • Bespoke</p>
+            </div>
+        </a>
+
+        <nav class="site-nav" id="siteNav">
+            <a href="index.html">Beranda</a>
+            <a href="tentang.html">Tentang</a>
+            <a href="#" class="primary">Layanan</a>
+            <a href="catalogue.html">Catalogue</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <button class="hamburger" id="hamburgerBtn">☰</button>
+    </header>
+
+    <!-- MOBILE MENU -->
+    <div class="slide-overlay" id="slideOverlay">
+        <div class="slide-panel" id="slidePanel">
+            <nav>
+                <a href="index.html">Beranda</a>
+                <a href="tentang.html">Tentang</a>
+                <a href="#" class="primary">Layanan</a>
+                <a href="catalogue.html">Catalogue</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <main class="hero fade-in">
+        <h2>Layanan Arka Living</h2>
+        <p>Kami menyediakan solusi lengkap furniture custom dan interior modern. Dari desain, pembuatan, hingga
+            instalasi, semuanya kami tangani dengan kualitas premium dan pengalaman personal.</p>
+        <a class="btn btn-primary" href="#services">Lihat Layanan</a>
+    </main>
+
+    <!-- LAYANAN -->
+    <section class="container grid-2 fade-in" id="services">
+        <div class="card-surface fade-in" style="position: relative;">
+            <div style="font-size:40px; color:#16a085; margin-bottom:12px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="40" height="40">
+                    <path
+                        d="M19.43 12.98c.04-.32.07-.66.07-1s-.03-.68-.07-1l2.11-1.65a.5.5 0 0 0 .12-.66l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a7.007 7.007 0 0 0-1.73-1l-.38-2.65A.5.5 0 0 0 13 2h-4a.5.5 0 0 0-.5.44l-.38 2.66a7.007 7.007 0 0 0-1.73 1l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.66l2.11 1.65c-.04.32-.07.66-.07 1s.03.68.07 1l-2.11 1.65a.5.5 0 0 0-.12.66l2 3.46a.5.5 0 0 0 .61.22l2.49-1a7.007 7.007 0 0 0 1.73 1l.38 2.66A.5.5 0 0 0 9 22h6a.5.5 0 0 0 .5-.44l.38-2.66a7.007 7.007 0 0 0 1.73-1l2.49 1a.5.5 0 0 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.66l-2.11-1.65zM12 15.5A3.5 3.5 0 1 1 15.5 12 3.504 3.504 0 0 1 12 15.5z" />
+                </svg>
+            </div>
+            <h3>Layanan Furniture Custom</h3>
+            <ul>
+                <li>• Sofa, meja, lemari, kitchen set sesuai permintaan</li>
+                <li>• Desain ergonomis & stylish</li>
+                <li>• Finishing premium & tahan lama</li>
+            </ul>
+        </div>
+
+        <div class="card-surface fade-in" style="position: relative;">
+            <div style="font-size:40px; color:#16a085; margin-bottom:12px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="40" height="40">
+                    <path d="M12 2L2 9l10 13 10-13-10-7zm0 2.18l7.5 5.25L12 18.82 4.5 9.43 12 4.18z" />
+                </svg>
+            </div>
+            <h3>Material & Keunggulan</h3>
+            <ul>
+                <li>• Kayu solid, veneer premium, engineered timber</li>
+                <li>• Finishing natural oil, matte lacquer, custom stain</li>
+                <li>• Ramah lingkungan & garansi kualitas 1 tahun</li>
+            </ul>
+        </div>
+
+        <div class="card-surface fade-in" style="position: relative;">
+            <div style="font-size:40px; color:#16a085; margin-bottom:12px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="40" height="40">
+                    <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z" />
+                </svg>
+            </div>
+            <h3>Layanan Interior Rumah</h3>
+            <ul>
+                <li>• Desain ruang tamu, kamar tidur, dapur, & kantor</li>
+                <li>• Konsultasi layout dan konsep</li>
+                <li>• Layanan turnkey hingga instalasi lengkap</li>
+            </ul>
+        </div>
+
+        <div class="card-surface fade-in" style="position: relative;">
+            <div style="font-size:40px; color:#16a085; margin-bottom:12px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="40" height="40">
+                    <path d="M12 3L1 9l11 6 9-5.09V17h2V9L12 3z" />
+                </svg>
+            </div>
+            <h3>Konsultasi & Project Turnkey</h3>
+            <ul>
+                <li>• Konsultasi desain profesional</li>
+                <li>• Penanganan project dari konsep hingga jadi</li>
+                <li>• Layanan after-sales & garansi</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- PROSES KERJA -->
+    <section class="container fade-in">
+        <h2 style="text-align:center; margin-bottom: 60px;">Proses Kerja Kami yang Transparan</h2>
+
+        <div class="timeline-container fade-in">
+
+            <div class="timeline-item">
+                <div class="timeline-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M8.25 10.5h7.5m-7.5 3h7.5m-7.5 3h7.5M8.25 21l2.25 2.25a.75.75 0 001.06 0l2.25-2.25M17.25 15l2.25 2.25a.75.75 0 001.06 0l2.25-2.25M6.75 15L4.5 17.25a.75.75 0 01-1.06 0L1.25 15" />
+                    </svg>
+                </div>
+                <div class="timeline-content card-surface">
+                    <h3>1. Konsultasi & Perencanaan Awal</h3>
+                    <p>Pertemuan mendalam untuk memahami visi, kebutuhan fungsional, dan preferensi estetika ruang Anda.
+                        Kami merangkum detail proyek untuk langkah selanjutnya.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9.75 3h4.5a3 3 0 013 3v12a3 3 0 01-3 3h-4.5a3 3 0 01-3-3V6a3 3 0 013-3zM15 15v-6h-6v6h6z" />
+                    </svg>
+                </div>
+                <div class="timeline-content card-surface">
+                    <h3>2. Pengembangan Desain 3D</h3>
+                    <p>Tim desainer kami membuat konsep visual 3D, pemilihan material premium, penyesuaian *layout*
+                        hingga finalisasi desain yang disetujui klien. Transparansi sebelum produksi dimulai.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6.75a5.25 5.25 0 00-5.25 5.25v2.25a1.5 1.5 0 001.5 1.5h7.5a1.5 1.5 0 001.5-1.5v-2.25a5.25 5.25 0 00-5.25-5.25zM12 6.75a5.25 5.25 0 00-5.25 5.25v2.25a1.5 1.5 0 001.5 1.5h7.5a1.5 1.5 0 001.5-1.5v-2.25a5.25 5.25 0 00-5.25-5.25z" />
+                    </svg>
+                </div>
+                <div class="timeline-content card-surface">
+                    <h3>3. Manufaktur & Kontrol Kualitas</h3>
+                    <p>Furniture custom Anda diproduksi di *workshop* kami menggunakan material terbaik. Setiap tahap
+                        melewati kontrol kualitas yang ketat, menjamin hasil akhir yang presisi dan tahan lama.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item last">
+                <div class="timeline-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                </div>
+                <div class="timeline-content card-surface">
+                    <h3>4. Instalasi & Serah Terima Proyek</h3>
+                    <p>Pengiriman dan pemasangan profesional di lokasi Anda. Tim kami memastikan setiap elemen terpasang
+                        sempurna, diikuti dengan serah terima dan garansi layanan *after-sales*.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- PORTFOLIO -->
+    <section class="container fade-in">
+        <h2 style="text-align:center;">Portfolio & Proyek Kami</h2>
+        <div class="grid-3 fade-in">
+            <div class="card-surface fade-in">
+                <img src="project1.jpg" alt="Rumah Modern" style="border-radius:12px; margin-bottom:12px;">
+                <h3>Rumah Modern</h3>
+                <p>Furniture custom & interior rumah modern lengkap.</p>
+            </div>
+            <div class="card-surface fade-in">
+                <img src="project2.jpg" alt="Office Interior" style="border-radius:12px; margin-bottom:12px;">
+                <h3>Office Interior</h3>
+                <p>Desain interior kantor profesional & furniture custom.</p>
+            </div>
+            <div class="card-surface fade-in">
+                <img src="project3.jpg" alt="Apartemen" style="border-radius:12px; margin-bottom:12px;">
+                <h3>Apartemen</h3>
+                <p>Solusi ruang terbatas dengan desain fungsional & stylish.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONI -->
+    <section class="container fade-in">
+        <h2 style="text-align:center;">Testimoni Klien</h2>
+        <div class="grid-3 fade-in">
+            <div class="card-surface fade-in">
+                <p>"Arka Living menghadirkan desain interior rumah kami persis sesuai impian. Profesional dan tepat
+                    waktu!"</p>
+                <h4>- Ibu Sari</h4>
+            </div>
+            <div class="card-surface fade-in">
+                <p>"Sofa & meja custom sangat berkualitas, finishing rapi, sesuai konsep yang kami inginkan."</p>
+                <h4>- Bapak Dedi</h4>
+            </div>
+            <div class="card-surface fade-in">
+                <p>"Tim Arka Living sangat komunikatif, mulai konsultasi sampai instalasi, semuanya lancar."</p>
+                <h4>- Ibu Fitri</h4>
+            </div>
+        </div>
+    </section>
+
+    <!------ FAQ ----->
+    <section class="container fade-in">
+        <h2 style="text-align:center;">Pertanyaan yang Sering Diajukan (FAQ)</h2>
+        <div class="faq-list">
+
+            <div class="faq-item card-surface fade-in">
+                <button class="faq-question">
+                    <h3>Apakah Arka Living melayani proyek di luar kota?</h3>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Saat ini, layanan kami terfokus di area Jabodetabek. Namun, kami terbuka untuk berdiskusi proyek
+                        di luar area tersebut. Silakan hubungi kami untuk konsultasi lebih lanjut.</p>
+                </div>
+            </div>
+
+            <div class="faq-item card-surface fade-in">
+                <button class="faq-question">
+                    <h3>Berapa lama proses pengerjaan furniture custom?</h3>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Durasi pengerjaan bervariasi tergantung kompleksitas dan jenis produk. Umumnya, berkisar antara
+                        4-8 minggu setelah desain final disetujui. Kami akan memberikan estimasi waktu yang lebih akurat
+                        setelah proses desain selesai.</p>
+                </div>
+            </div>
+
+            <div class="faq-item card-surface fade-in">
+                <button class="faq-question">
+                    <h3>Material apa saja yang digunakan? Apakah ada garansi?</h3>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Kami menggunakan material premium seperti kayu solid, MDF, dan HPL berkualitas tinggi. Setiap
+                        produk custom dari kami dilengkapi dengan garansi kualitas 1 tahun yang mencakup kerusakan
+                        akibat cacat produksi.</p>
+                </div>
+            </div>
+
+            <div class="faq-item card-surface fade-in">
+                <button class="faq-question">
+                    <h3>Bagaimana cara memulai proyek dengan Arka Living?</h3>
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Anda bisa memulai dengan mengisi formulir kontak di halaman ini atau menghubungi kami langsung
+                        melalui WhatsApp. Tim kami akan segera merespons untuk menjadwalkan sesi konsultasi awal.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="container fade-in" style="text-align:center;">
+        <div class="card-surface cta-glow fade-in"
+            style="background: linear-gradient(135deg, #1abc9c, #2ecc71); color: white; padding: 48px 24px;">
+            <h3>Siap Konsultasi & Memesan Furniture Anda?</h3>
+            <p>Hubungi tim kami untuk solusi interior dan furniture custom terbaik, langsung dari para ahli.</p>
+            <a class="btn btn-primary" href="index.html#contact">Konsultasi Desain</a>
+            <a class="btn btn-ghost" style="background:white; color:#16a085; border:none;"
+                href="index.html#produk">Lihat Produk</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer" role="contentinfo">
+        <div style="max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+                <div style="display:flex;align-items:center;gap:12px">
+                    <div class="logo-mark" style="width:40px;height:40px">AL</div>
+                    <div>
+                        <strong>Arka Living</strong><br>
+                        <small style="color:rgba(255,255,255,0.82)">Furniture • Interior • Bespoke</small>
+                    </div>
+                </div>
+                <div style="color:rgba(255,255,255,0.88)">© 2025 Arka Living — All rights reserved</div>
+            </div>
+
+            <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;color:rgba(255,255,255,0.85)">
+                <a href="#produk" style="color:inherit;text-decoration:none">Produk</a>
+                <a href="#about" style="color:inherit;text-decoration:none">Tentang</a>
+                <a href="#contact" style="color:inherit;text-decoration:none">Kontak</a>
+                <a href="#" style="color:inherit;text-decoration:none">Kebijakan Privasi</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BACK TO TOP -->
+    <button id="backTop" title="Kembali ke atas">↑</button>
+
+    <!-- SCRIPT -->
+    <script>
+        // Mobile menu
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const slideOverlay = document.getElementById('slideOverlay');
+        const slidePanel = document.getElementById('slidePanel');
+
+        function openSlideMenu() {
+            slideOverlay.style.display = 'flex';
+            slideOverlay.classList.add('active');
+            requestAnimationFrame(() => { slidePanel.classList.add('show'); });
+            hamburgerBtn.textContent = '✕';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSlideMenu() {
+            slidePanel.classList.remove('show');
+            setTimeout(() => {
+                slideOverlay.style.display = 'none';
+                slideOverlay.classList.remove('active');
+            }, 280);
+            hamburgerBtn.textContent = '☰';
+            document.body.style.overflow = '';
+        }
+
+        hamburgerBtn.addEventListener('click', () => {
+            slidePanel.classList.contains('show') ? closeSlideMenu() : openSlideMenu();
+        });
+
+        slideOverlay.addEventListener('click', (e) => {
+            if (e.target === slideOverlay) closeSlideMenu();
+        });
+
+        slidePanel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSlideMenu));
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSlideMenu(); });
+
+        // Fade-in on scroll
+        function fadeInOnScroll() {
+            const elements = document.querySelectorAll('.fade-in');
+            const triggerBottom = window.innerHeight * 0.85;
+
+            elements.forEach(el => {
+                const elTop = el.getBoundingClientRect().top;
+                if (elTop < triggerBottom) {
+                    el.classList.add('show');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', fadeInOnScroll);
+        window.addEventListener('load', fadeInOnScroll);
+
+        // Back to top
+        const backTop = document.getElementById('backTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                backTop.style.display = 'flex';
+            } else {
+                backTop.style.display = 'none';
+            }
+        });
+        backTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const faqAnswer = button.nextElementSibling;
+
+                faqItem.classList.toggle('active');
+
+                if (faqItem.classList.contains('active')) {
+                    faqAnswer.style.maxHeight = faqAnswer.scrollHeight + 'px';
+                } else {
+                    faqAnswer.style.maxHeight = 0;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

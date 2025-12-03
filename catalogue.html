@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Arka Living — Katalog Produk</title>
+    <meta name="description"
+        content="Katalog berbagai produk furniture Arka Living. Temukan inspirasi desain interior dari koleksi kami.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1abc9c;
+            --dark: #2c3e50;
+            --light: #f8fafb;
+            --muted: #6b7280;
+            --radius: 14px;
+            --header-h: 72px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Inter", system-ui, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        /* Header (fixed) */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-h);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(44, 62, 80, 0.08);
+            z-index: 1200;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--dark);
+        }
+
+        .logo-mark {
+            background: linear-gradient(135deg, var(--primary), #16a085);
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav.site-nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        nav.site-nav a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            padding: 8px 6px;
+        }
+
+        nav.site-nav a::after {
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: width .25s;
+        }
+
+        nav.site-nav a:hover::after,
+        nav.site-nav a.active::after {
+            width: 100%;
+        }
+
+        /* Hamburger button (hidden desktop) */
+        button.hamburger {
+            width: 48px;
+            height: 44px;
+            border-radius: 10px;
+            border: 0;
+            background: rgba(255, 255, 255, 0.6);
+            display: none;
+            /* show in mobile via media query */
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Main content */
+        main {
+            padding: calc(var(--header-h) + 20px) 16px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-head {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .page-head h2 {
+            font-size: 1.8rem;
+            margin: 6px 0;
+        }
+
+        .page-head p {
+            color: var(--muted);
+            margin: 0;
+        }
+
+        /* Sticky search */
+        .search-wrap {
+            position: sticky;
+            top: calc(var(--header-h));
+            z-index: 1100;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+            backdrop-filter: blur(6px);
+            padding: 12px 0;
+            margin-bottom: 14px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 6px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(44, 62, 80, 0.12);
+            font-size: 1rem;
+        }
+
+        .search-bar button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Filter bar (desktop only) */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 18px 0 30px;
+        }
+
+        .filter-bar button {
+            background: white;
+            border: 1px solid rgba(44, 62, 80, 0.1);
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.18s;
+        }
+
+        .filter-bar button.active,
+        .filter-bar button:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform .18s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-card .info {
+            padding: 12px 14px;
+            flex: 1;
+        }
+
+        .product-card h4 {
+            margin: 0 0 6px;
+            font-size: 1rem;
+        }
+
+        .product-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: .92rem;
+        }
+
+        /* Modal product */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1400;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 720px;
+            width: 94%;
+            padding: 18px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+            animation: modalIn .22s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .modal-content h3 {
+            margin: 0 0 8px;
+        }
+
+        .modal-content p {
+            color: var(--muted);
+            margin: 0 0 10px;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 14px;
+            top: 10px;
+            font-size: 22px;
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+        }
+
+        /* Floating filter button (mobile) */
+        .filter-fab {
+            position: fixed;
+            bottom: 28px;
+            right: 88px;
+            /* sits left of backTop */
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: none;
+            /* shown in mobile via media query */
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), #16a085);
+            color: white;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+            border: none;
+            cursor: pointer;
+            z-index: 1500;
+        }
+
+        .filter-fab svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Filter modal (mobile) */
+        .filter-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1500;
+        }
+
+        .filter-modal.active {
+            display: flex;
+        }
+
+        .filter-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            width: 92%;
+            max-width: 360px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filter-panel h4 {
+            margin: 0 0 6px;
+        }
+
+        .filter-panel .cat-btn {
+            border: 1px solid rgba(44, 62, 80, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: white;
+            font-weight: 600;
+        }
+
+        .filter-panel .cat-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Back to top */
+        #backTop {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 24px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1600;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        #backTop:hover {
+            background: #16a085;
+            transform: translateY(-2px);
+        }
+
+        /* Slide panel for hamburger (mobile) */
+        .slide-overlay {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 1300;
+        }
+
+        .slide-overlay.active {
+            display: flex;
+        }
+
+        .slide-panel {
+            margin-top: var(--header-h);
+            width: 92%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-6px);
+            opacity: 0;
+            transition: all .24s;
+        }
+
+        .slide-panel.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .slide-panel nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .slide-panel nav a {
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 900px) {
+            nav.site-nav {
+                display: none;
+            }
+
+            button.hamburger {
+                display: flex;
+            }
+
+            .filter-bar {
+                display: none;
+            }
+
+            /* hide desktop filters on mobile */
+            .filter-fab {
+                display: flex;
+            }
+
+            /* show floating filter */
+            .search-wrap {
+                top: calc(var(--header-h));
+            }
+
+            /* sticky under header */
+            .product-card img {
+                height: 160px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-card img {
+                height: 140px;
+            }
+
+            .filter-fab {
+                right: 16px;
+                bottom: 90px;
+            }
+
+            /* avoid overlapping with other UI on small screens */
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 28px 16px;
+            margin-top: 28px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="brand">
+            <span class="logo-mark">AL</span>
+            <strong>Arka Living</strong>
+        </a>
+
+        <nav class="site-nav" id="siteNav" aria-label="Main navigation">
+            <a href="index.html">Beranda</a>
+            <a href="tentang.html">Tentang</a>
+            <a href="layanan.html">Layanan</a>
+            <a href="#" class="primary">Catalogue</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <button class="hamburger" id="hamburgerBtn" aria-label="Buka menu">☰</button>
+    </header>
+
+    <!-- Slide panel (hamburger menu) -->
+    <div class="slide-overlay" id="slideOverlay" aria-hidden="true">
+        <div class="slide-panel" id="slidePanel" role="dialog" aria-modal="true" aria-label="Menu navigasi">
+            <nav>
+                <a href="index.html"><span class="icon" aria-hidden="true"></span>Beranda</a>
+                <a href="tentang.html"><span class="icon" aria-hidden="true"></span>Tentang</a>
+                <a href="layanan.html"><span class="icon" aria-hidden="true"></span>Layanan</a>
+                <a href="#" class="primary"><span class="icon" aria-hidden="true"></span>Catalogue</a>
+                <a href="contact.html"><span class="icon" aria-hidden="true"></span>Kontak</a>         
+        </div>
+    </div>
+
+    <main>
+        <div class="page-head">
+            <h2>Katalog Produk</h2>
+            <p>Telusuri berbagai koleksi furniture dan desain custom Arka Living.</p>
+        </div>
+
+        <!-- Sticky Search -->
+        <div class="search-wrap">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Cari produk atau kategori...">
+                <button id="searchBtn">Cari</button>
+            </div>
+        </div>
+
+        <!-- Filter bar (desktop only) -->
+        <div class="filter-bar" id="filterBar">
+            <button class="active" data-filter="all">Semua</button>
+            <button data-filter="meja">Meja</button>
+            <button data-filter="kursi">Kursi</button>
+            <button data-filter="lemari">Lemari</button>
+            <button data-filter="dapur">Dapur</button>
+        </div>
+
+        <!-- Product grid -->
+        <div class="grid" id="productGrid" aria-live="polite"></div>
+    </main>
+
+    <!-- Floating filter button (mobile) -->
+    <button class="filter-fab" id="filterFab" title="Filter kategori" aria-label="Filter kategori">
+        <!-- simple funnel icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 5h18M6 12h12M10 19h4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+    </button>
+
+    <!-- Filter modal (mobile) -->
+    <div class="filter-modal" id="filterModal" aria-hidden="true">
+        <div class="filter-panel" role="dialog" aria-modal="true" aria-label="Pilih kategori">
+            <h4>Pilih Kategori</h4>
+            <button class="cat-btn active" data-filter="all">Semua</button>
+            <button class="cat-btn" data-filter="meja">Meja</button>
+            <button class="cat-btn" data-filter="kursi">Kursi</button>
+            <button class="cat-btn" data-filter="lemari">Lemari</button>
+            <button class="cat-btn" data-filter="dapur">Dapur</button>
+            <div style="display:flex;gap:10px;margin-top:8px;">
+                <button id="applyFilterMobile"
+                    style="flex:1;background:var(--primary);color:white;border:none;padding:10px;border-radius:8px;font-weight:700;">Terapkan</button>
+                <button id="closeFilterMobile"
+                    style="flex:1;background:#f3f4f6;border:none;padding:10px;border-radius:8px;font-weight:700;">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product modal -->
+    <div class="modal" id="productModal" aria-hidden="true">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-label="Detail produk">
+            <button class="close-btn" id="closeModal">&times;</button>
+            <img src="" alt="" id="modalImg">
+            <h3 id="modalTitle"></h3>
+            <p id="modalDesc"></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        © 2025 Arka Living — All rights reserved.
+    </footer>
+
+    <!-- Back to top -->
+    <button id="backTop" title="Kembali ke atas" aria-label="Kembali ke atas">↑</button>
+
+    <script>
+        // Dummy products
+        const products = [
+            { name: "Meja Kayu Minimalis", category: "meja", img: "https://picsum.photos/600/400?1", desc: "Meja ruang tamu elegan dengan finishing natural kayu jati." },
+            { name: "Kursi Scandinavian", category: "kursi", img: "https://picsum.photos/600/400?2", desc: "Kursi bergaya modern dengan kenyamanan tinggi." },
+            { name: "Lemari Pakaian Putih", category: "lemari", img: "https://picsum.photos/600/400?3", desc: "Lemari besar dengan desain minimalis dan elegan." },
+            { name: "Set Dapur Modern", category: "dapur", img: "https://picsum.photos/600/400?4", desc: "Perpaduan kayu dan marmer, ideal untuk dapur masa kini." },
+            { name: "Meja Belajar Anak", category: "meja", img: "https://picsum.photos/600/400?5", desc: "Desain ergonomis dan aman untuk anak-anak." },
+            { name: "Kursi Santai Rotan", category: "kursi", img: "https://picsum.photos/600/400?6", desc: "Terbuat dari rotan alami, cocok untuk ruang santai." },
+            { name: "Lemari Sliding Door", category: "lemari", img: "https://picsum.photos/600/400?7", desc: "Desain hemat ruang dengan pintu geser." },
+            { name: "Kitchen Set Natural", category: "dapur", img: "https://picsum.photos/600/400?8", desc: "Nuansa kayu hangat untuk dapur modern." }
+        ];
+
+        // Elements
+        const grid = document.getElementById('productGrid');
+        const modal = document.getElementById('productModal');
+        const modalImg = document.getElementById('modalImg');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDesc = document.getElementById('modalDesc');
+        const closeModal = document.getElementById('closeModal');
+        const filterButtons = document.querySelectorAll('.filter-bar button');
+        const filterFab = document.getElementById('filterFab');
+        const filterModal = document.getElementById('filterModal');
+        const mobileCatBtns = document.querySelectorAll('.filter-panel .cat-btn');
+        const applyFilterMobile = document.getElementById('applyFilterMobile');
+        const closeFilterMobile = document.getElementById('closeFilterMobile');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const backTopBtn = document.getElementById('backTop');
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const slideOverlay = document.getElementById('slideOverlay');
+        const slidePanel = document.getElementById('slidePanel');
+
+        let currentFilter = "all";
+        let currentSearch = "";
+
+        // Render products based on filter & search
+        function renderProducts() {
+            grid.innerHTML = "";
+            const filtered = products.filter(p => {
+                const matchFilter = currentFilter === "all" || p.category === currentFilter;
+                const q = currentSearch.trim().toLowerCase();
+                const matchSearch = q === "" || p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
+                return matchFilter && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = "<p style='grid-column:1/-1;color:var(--muted);text-align:center'>Tidak ada produk ditemukan.</p>";
+                return;
+            }
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+          <img src="${p.img}" alt="${p.name}">
+          <div class="info">
+            <h4>${p.name}</h4>
+            <p>${p.category.charAt(0).toUpperCase() + p.category.slice(1)}</p>
+          </div>
+        `;
+                card.addEventListener('click', () => openProductModal(p));
+                grid.appendChild(card);
+            });
+        }
+
+        function openProductModal(p) {
+            modal.classList.add('active');
+            modalImg.src = p.img;
+            modalTitle.textContent = p.name;
+            modalDesc.textContent = p.desc;
+            document.body.style.overflow = 'hidden';
+            modal.setAttribute('aria-hidden', 'false');
+        }
+        function closeProductModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            modal.setAttribute('aria-hidden', 'true');
+        }
+
+        // Init
+        renderProducts();
+
+        // Desktop filter buttons
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelector('.filter-bar .active').classList.remove('active');
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderProducts();
+            });
+        });
+
+        // Search behavior
+        function applySearch() {
+            currentSearch = searchInput.value;
+            renderProducts();
+        }
+        searchBtn.addEventListener('click', applySearch);
+        searchInput.addEventListener('keyup', e => {
+            if (e.key === 'Enter') applySearch();
+            else {
+                // optional: live search as user types (uncomment if desired)
+                // currentSearch = searchInput.value; renderProducts();
+            }
+        });
+
+        // Modal close
+        closeModal.addEventListener('click', closeProductModal);
+        modal.addEventListener('click', e => { if (e.target === modal) closeProductModal(); });
+
+        // Back to top
+        window.addEventListener('scroll', () => {
+            backTopBtn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+        });
+        backTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // Hamburger menu logic (mobile)
+        function closeSlideMenu() {
+            slidePanel.classList.remove('show');
+            setTimeout(() => slideOverlay.classList.remove('active'), 220);
+        }
+        hamburgerBtn.addEventListener('click', () => {
+            const isActive = slideOverlay.classList.contains('active');
+            if (isActive) closeSlideMenu();
+            else {
+                slideOverlay.classList.add('active');
+                setTimeout(() => slidePanel.classList.add('show'), 20);
+            }
+        });
+        slideOverlay.addEventListener('click', e => { if (e.target === slideOverlay) closeSlideMenu(); });
+        // close slide on link click
+        slidePanel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSlideMenu));
+
+        // Mobile filter fab opens filter modal
+        filterFab.addEventListener('click', () => {
+            filterModal.classList.add('active');
+            filterModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        });
+        closeFilterMobile.addEventListener('click', () => {
+            filterModal.classList.remove('active');
+            filterModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        });
+
+        // Choose category inside filter modal
+        mobileCatBtns.forEach(b => {
+            b.addEventListener('click', () => {
+                mobileCatBtns.forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+            });
+        });
+
+        // Apply mobile filter
+        applyFilterMobile.addEventListener('click', () => {
+            const activeBtn = document.querySelector('.filter-panel .cat-btn.active');
+            if (activeBtn) {
+                // Sync desktop filter UI as well (if visible)
+                const key = activeBtn.dataset.filter || 'all';
+                currentFilter = key;
+                // update desktop bar active state if present
+                const desktopActive = document.querySelector('.filter-bar .active');
+                if (desktopActive) desktopActive.classList.remove('active');
+                const corresponding = document.querySelector(`.filter-bar button[data-filter="${key}"]`);
+                if (corresponding) corresponding.classList.add('active');
+            }
+            filterModal.classList.remove('active');
+            filterModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            renderProducts();
+        });
+
+        // Close filter modal when click outside panel
+        filterModal.addEventListener('click', (e) => { if (e.target === filterModal) { filterModal.classList.remove('active'); document.body.style.overflow = ''; } });
+
+        // Accessibility: close modals with Esc
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (modal.classList.contains('active')) closeProductModal();
+                if (filterModal.classList.contains('active')) { filterModal.classList.remove('active'); document.body.style.overflow = ''; }
+                if (slideOverlay.classList.contains('active')) closeSlideMenu();
+            }
+        });
+
+        // Optional: make filter modal category match currentFilter on open
+        filterFab.addEventListener('click', () => {
+            mobileCatBtns.forEach(b => b.classList.remove('active'));
+            const cur = currentFilter || 'all';
+            const match = Array.from(mobileCatBtns).find(b => b.dataset.filter === cur);
+            if (match) match.classList.add('active');
+            else mobileCatBtns[0].classList.add('active');
+        });
+
+        // initial sync: set desktop filter active on load
+        (function syncDesktopFilter() {
+            const def = document.querySelector(`.filter-bar button[data-filter="${currentFilter}"]`);
+            if (def) def.classList.add('active');
+        })();
+
+    </script>
+</body>
+
+</html>
