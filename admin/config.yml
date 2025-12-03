@@ -1,20 +1,24 @@
 backend:
-  name: github
-  repo: risqitunggal/Risqi # Ganti dengan nama repo Anda
-  branch: main # Ganti dengan nama cabang utama Anda
+  # GANTI DARI 'github' MENJADI 'git-gateway'
+  name: git-gateway 
+  # URL tempat identitas Netlify Anda berada
+  identity_url: "https://tescm.netlify.app/.netlify/identity" 
+  # repo dan branch tetap diperlukan untuk git-gateway
+  repo: risqitunggal/Risqi 
+  branch: main 
 
-publish_mode: editorial_workflow # Opsional: memungkinkan draft sebelum publish
+publish_mode: editorial_workflow 
 
-media_folder: "gambar/berita" # Folder di repo tempat gambar berita akan disimpan
-public_folder: "/gambar/berita" # Path publik ke folder gambar berita
+media_folder: "gambar/berita" 
+public_folder: "/gambar/berita" 
 
 collections:
-  - name: "berita" # Nama koleksi (digunakan di URL admin)
+  - name: "berita" 
     label: "Berita & Artikel"
-    folder: "_berita" # Folder tempat file markdown berita akan disimpan
-    create: true # Izinkan admin membuat postingan baru
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # Format nama file
-    fields: # Kolom-kolom yang harus diisi admin
+    folder: "_berita"
+    create: true 
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" 
+    fields:
       - {label: "Judul", name: "title", widget: "string"}
       - {label: "Tanggal Posting", name: "date", widget: "datetime"}
       - {label: "Gambar Utama", name: "image", widget: "image"}
