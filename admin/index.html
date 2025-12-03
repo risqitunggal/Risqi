@@ -5,45 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel - Arka Living</title>
   
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script> 
-  
   <script>
-    // 1. Definisikan path config.yml
     window.CMS_CONFIGURATION = {
       config: '/admin/config.yml'
     };
-    // 2. DISABLE AUTO-INIT DECAP CMS
-    window.CMS_MANUAL_INIT = true; // <-- TAMBAHKAN INI
-
-    // 3. Muat Decap CMS secara ASINKRON setelah Identity siap
-    function loadCMS() {
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
-      script.onload = () => { // Ketika script sudah selesai dimuat...
-        // ...inisialisasi CMS secara manual
-        if (window.CMS) {
-            window.CMS.init(); // <-- INI PENTING
-        }
-        console.log("Decap CMS loaded and manually initialized!");
-      };
-      document.body.appendChild(script);
-    }
-
-    // 4. TUNGGU Identity Widget siap diinisialisasi
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', user => {
-        // Hanya muat CMS setelah Identity siap
-        if (!window.CMS) { // Pastikan belum dimuat sebelumnya
-            loadCMS();
-        }
-      });
-      // Panggil init() agar event 'init' ter-trigger
-      window.netlifyIdentity.init(); 
-    } else {
-      loadCMS(); // Fallback
-    }
+    window.CMS_MANUAL_INIT = true; // Mencegah auto-load
   </script>
+
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script> 
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </head>
 <body>
+  <script>
+    // INI ADALAH EVENT LISTENER STANDAR
+    // Hanya inisialisasi CMS setelah Identity Widget siap
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on('init', () => {
+        if (window.CMS) {
+            window.CMS.init();
+        }
+      });
+    }
+  </script>
 </body>
 </html>
