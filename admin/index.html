@@ -7,35 +7,43 @@
   
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script> 
   
-  </head>
-<body>
   <script>
     // 1. Definisikan path config.yml
     window.CMS_CONFIGURATION = {
       config: '/admin/config.yml'
     };
+    // 2. DISABLE AUTO-INIT DECAP CMS
+    window.CMS_MANUAL_INIT = true; // <-- TAMBAHKAN INI
 
-    // 2. Muat Decap CMS secara ASINKRON setelah Identity siap
+    // 3. Muat Decap CMS secara ASINKRON setelah Identity siap
     function loadCMS() {
       const script = document.createElement('script');
       script.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
+      script.onload = () => { // Ketika script sudah selesai dimuat...
+        // ...inisialisasi CMS secara manual
+        if (window.CMS) {
+            window.CMS.init(); // <-- INI PENTING
+        }
+        console.log("Decap CMS loaded and manually initialized!");
+      };
       document.body.appendChild(script);
-      console.log("Decap CMS loaded!"); // Untuk debugging
     }
 
-    // 3. TUNGGU Identity Widget siap diinisialisasi
+    // 4. TUNGGU Identity Widget siap diinisialisasi
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on('init', user => {
-        // Jika Identity siap (terlepas dari user login/tidak), muat CMS
-        loadCMS(); 
+        // Hanya muat CMS setelah Identity siap
+        if (!window.CMS) { // Pastikan belum dimuat sebelumnya
+            loadCMS();
+        }
       });
-
-      // Tambahan: Identity.init() harus dipanggil jika tidak dipanggil otomatis
-      window.netlifyIdentity.init();
+      // Panggil init() agar event 'init' ter-trigger
+      window.netlifyIdentity.init(); 
     } else {
-      // Fallback jika Netlify Identity gagal dimuat
-      loadCMS();
+      loadCMS(); // Fallback
     }
   </script>
+</head>
+<body>
 </body>
 </html>
