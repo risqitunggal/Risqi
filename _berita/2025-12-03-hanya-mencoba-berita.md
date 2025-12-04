@@ -5,3 +5,5 @@ image: /gambar/berita/ruang-tidur.webp
 summary: "SEBENARNYA "
 ---
 **JUST TESTING**
+
+![](/gambar/berita/dominasi-material-kayu.webp)
