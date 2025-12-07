@@ -12,25 +12,10 @@ summary: Puji syukur Alhamdullillah, penulis panjatkan kehadiran Allah SWT yang
 ---
 BAB I PENDAHULUAN
 
-
-Teknologi informasi khususnya jaringan komputer pada saat ini telah menjadi salah satu hal yang mendasar dalam semua segi. Infrastruktur teknologi informasi merupakan sumber daya strategis bagi perusahaan dan perlu diatur dengan baik oleh perusahaan. Infrastruktur teknologi informasi mendukung aliran dan pengolahan informasi dalam suatu perusahaan secara terus menerus. Dalam membangun infrastrukur teknologi informasi kita perlu menggunakan jaringan. Jaringan digunakan untuk menghubungkan komputer dengan jarak yang terbatas antara dua atau lebih tempat yang berbeda disebut Local Area Network.
+Teknologi informasi khususnya jaringan komputer pada saat ini telah menjadi salah satu hal yang mendasar dalam semua segi. Infrastruktur teknologi informasi merupakan sumber daya strategis bagi perusahaan dan perlu diatur dengan baik oleh perusahaan. **Infrastruktur teknologi informasi** mendukung aliran dan pengolahan informasi dalam suatu perusahaan secara terus menerus. Dalam membangun infrastrukur teknologi informasi kita perlu menggunakan jaringan. Jaringan digunakan untuk menghubungkan komputer dengan jarak yang terbatas antara dua atau lebih tempat yang berbeda disebut Local Area Network.
 Keamanan pada jaringan merupakan hal yang sangat penting untuk menjaga agar infrastruktur jaringan dapat dikatakan baik. Karena, infrastruktur jaringan yang baik dapat menunjang proses bisnis yang ada pada perusahaan. Untuk itu, perusahaan harus menjaga keamanan jaringan yang ada pada perusahaan mereka agar dapat menutup celah bagi pihak yang tidak bertanggung jawab. Adapun salah satu tools yang digunakan dalam Simulasi untuk melakukan Konfigurasi kemanan jaringan adalah dengan menggunakan Cisco paket tracer .
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 1
-
 
 BAB II LANDASAN TEORI
 
